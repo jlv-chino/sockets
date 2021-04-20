@@ -15,7 +15,7 @@
     <script src="socket.io/socket.io.js"></script>
 
     <script>
-        
+
         var socket = io()
 
         socket.on('connect', function(){
@@ -29,6 +29,12 @@
         socket.emit('enviarMensaje', {
             usuario: 'Chino',
             mensaje: 'Hello world'
+        }, function(resp){
+            console.log('Respuesta server: ', resp);
+        })
+
+        socket.on('enviarMensaje', function(mensaje){
+            console.log('Servidor', mensaje);
         })
 
     </script>
