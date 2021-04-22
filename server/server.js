@@ -3,6 +3,7 @@ const socketIO = require('socket.io')
 const http = require('http')
 
 const path = require('path')
+const { Script } = require('vm')
 
 const app = express()
 let server = http.createServer(app)
@@ -12,36 +13,9 @@ const port = process.env.PORT || 3000
 
 app.use(express.static(publicPath))
 
-let io = socketIO(server)
+module.exports.io = socketIO(server)
 
-io.on('connection', (client)=>{
-
-    console.log('Usuario conectado');
-
-    client.emit('enviarMensaje', {
-        usuario: 'Administrador',
-        mensaje: 'Bienvenido a la App'
-    })
-
-    client.on('disconnect', ()=>{
-        console.log('Usuario desconectado');
-    })
-
-    client.on('enviarMensaje', (mensaje, callback)=>{
-        
-        if(mensaje.usuario){
-            callback({
-                resp: 'Todo salió perfecto'
-            })
-        }else{
-            callback({
-                resp: 'Todo salió mal'
-            })
-        }
-        
-    })
-
-})
+require('./sockets/socket')
 
 server.listen(port, (err) => {
 
